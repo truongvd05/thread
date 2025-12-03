@@ -76,9 +76,7 @@ httpThreads.interceptors.response.use(
         originalRequest.headers["Authorization"] = "Bearer " + newToken;
         return httpThreads(originalRequest);
       } catch (err) {
-        console.log(123);
         store.dispatch(clearUser());
-        window.location.href = "/#/login";
         isRefreshing = false;
         return Promise.reject(err);
       }

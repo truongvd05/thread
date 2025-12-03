@@ -12,7 +12,7 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 import Loading from "@/components/Loading";
 import { selectFeedData } from "@/feartures/feed/feedSelector";
 import withLoginModal from "@/hoc/withLoginModal";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function Home({requireLogin}) {
     const { user } = useSelector(selectUser)
@@ -57,8 +57,10 @@ function Home({requireLogin}) {
                         ) : (
                             items.map(item => (
                                 <div onClick={() => {
+                                        if(!user) return requireLogin();
                                         navigate(`/post/${item.id}`);
                                     }} key={item.id} 
+                                    id={item.id}
                                     className="flex flex-col gap-2 border-b-[1px] p-[16px] cursor-pointer">
                                     <Post userId={item.user?.id} id={item?.id} name={item?.user.name} content={item?.content} />
                                     <PostCard

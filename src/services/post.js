@@ -70,3 +70,14 @@ export const createPost = async (content) => {
     throw err.response?.data || { message: "lỗi" };
   }
 };
+
+export const replyPost = async (content, id) => {
+  try {
+    const res = await http.post(`api/posts/${id}/reply`, { content });
+    return res.data;
+  } catch (err) {
+    {
+      throw err.response?.data || { message: "lỗi" };
+    }
+  }
+};

@@ -5,14 +5,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useForm } from "react-hook-form"
-import { useState } from "react";
 import copy from "copy-to-clipboard";
-
 import DropDownText from "@/layout/DefaultLayout/component/DropDownText";
 import useRepost from "@/hooks/useRepost";
 import useLike from "@/hooks/useLike";
-import QuoteModal from "../QuoteModal";
-import Reply from "./Reply";
+import { usePostModal } from "@/contexts/PostModalContext";
 
 function PostCard({
     like,
@@ -26,22 +23,14 @@ function PostCard({
     requireLogin,
     isRepost
 }) {
-    const [open, setOpen] = useState(false)
-    const [openQuote, setOpenQuote] = useState(false);
-    const [openReply, setOpenReply] = useState(false);
     const {
-        register,
-        handleSubmit,
-        watch,
-        setValue,
         formState: { errors },
     } = useForm()
-    const onSubmit = (data) => console.log(data)
-    let comment = watch("comment");
     const {isLiked, likeCount, toggleLike, loading: likeLoading} = 
         useLike(isLikeByAuth, like, id, requireLogin, user)
     const { isReposted, repostCount, toggleRepost, loading: repostLoading } =
         useRepost(isRepost, repeat, id, requireLogin, user);
+    const { openReply, openQuote } = usePostModal();
     return (
         <div onClick={(e) => {
             e.stopPropagation()
@@ -62,7 +51,7 @@ function PostCard({
                     e.stopPropagation();
                     if(!user) return requireLogin();
                         e.stopPropagation()
-                        setOpenReply(true)
+                        openReply(id)
                 }} className="cursor-pointer">
                     <i className="fa-regular fa-comment my-auto mx-0"></i>
                     <p>{cmt ?? 5}</p>
@@ -93,7 +82,7 @@ function PostCard({
                             <DropdownMenuItem >
                                 <DropDownText onClick={(e) => {
                                     e.stopPropagation()
-                                    setOpenQuote(true)
+                                    openQuote(id)
                                 }} text="Quote" mAuto>
                                     <i className="fa-regular fa-comment-dots"></i>
                                 </DropDownText>
@@ -138,8 +127,6 @@ function PostCard({
                     </DropdownMenu>
                 </div>
             </div>
-            <Reply open={openReply} onClose={setOpenReply}/>
-            <QuoteModal open={openQuote} onClose={setOpenQuote}/>
         </div>
     )
 }

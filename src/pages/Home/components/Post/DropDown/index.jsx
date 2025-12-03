@@ -69,7 +69,7 @@ function DropDown({id, userId}) {
                             <i className="fa-solid fa-link"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    {user.user.id === userId ? 
+                    {user.user?.id === userId ? 
                     <DropdownMenuItem onClick={() => handleDelete()}>
                         <DropDownText text="Xóa" mAuto red>
                             <i className="fa-solid fa-delete-left"></i>
