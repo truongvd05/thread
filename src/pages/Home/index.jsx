@@ -12,14 +12,15 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 import Loading from "@/components/Loading";
 import { selectFeedData } from "@/feartures/feed/feedSelector";
 import withLoginModal from "@/hoc/withLoginModal";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import QoutePost from "./components/Post/QuotePost";
 
 function Home({requireLogin}) {
     const { user } = useSelector(selectUser)
     const data = useSelector(selectFeedData)
-
     const navigate = useNavigate()
     const srollRef = useRef(null);
+    const imgRef = useRef({});
     const {
         items,
         feedLoading,
@@ -61,9 +62,17 @@ function Home({requireLogin}) {
                                         navigate(`/post/${item.id}`);
                                     }} key={item.id} 
                                     id={item.id}
+                                    ref={el => (imgRef.current[item.id] = el)}
                                     className="flex flex-col gap-2 border-b-[1px] p-[16px] cursor-pointer">
-                                    <Post userId={item.user?.id} id={item?.id} name={item?.user.name} content={item?.content} />
+                                    <Post
+                                    userId={item.user?.id}
+                                    id={item?.id}
+                                    name={item?.user.name}
+                                    content={item?.content}
+                                    time={item?.created_at}
+                                    />
                                     <PostCard
+                                    ref={imgRef}
                                     replyName={item.user.name}
                                     isLikeByAuth={item.is_liked_by_auth}
                                     id={item.id}
@@ -74,6 +83,13 @@ function Home({requireLogin}) {
                                     user={user} requireLogin={requireLogin}
                                     isRepost={item.is_reposted_by_auth}
                                     />
+                                    {item.original_post && 
+                                    (<QoutePost 
+                                    content={item?.original_post.content}
+                                    id={item?.original_post.id}
+                                    user={item?.original_post.user}
+                                    time={item?.created_at}
+                                    />)}
                                 </div>
                             ))
                         )}

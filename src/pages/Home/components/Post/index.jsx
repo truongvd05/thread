@@ -1,9 +1,9 @@
 import User from "./User";
 
-function Post({src, name, content, id, userId}) {
+function Post({src, name, content, id, userId, time}) {
     return (
         <div className="flex flex-col gap-2">
-            <User userId={userId} id={id} tick src={src} name={name}>
+            <User time={time} userId={userId} id={id} tick src={src} name={name}>
                 <p className="text-left">{content}</p>
             </User>
         </div>

@@ -4,15 +4,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+
 import { useForm } from "react-hook-form"
 import copy from "copy-to-clipboard";
 import DropDownText from "@/layout/DefaultLayout/component/DropDownText";
 import useRepost from "@/hooks/useRepost";
 import useLike from "@/hooks/useLike";
 import { usePostModal } from "@/contexts/PostModalContext";
+import { forwardRef } from "react";
 
-function PostCard({
-    like,
+const PostCard = forwardRef(({
+    like,   
     cmt,
     repeat,
     share, 
@@ -22,7 +26,7 @@ function PostCard({
     user,
     requireLogin,
     isRepost
-}) {
+}, imgRef) => {
     const {
         formState: { errors },
     } = useForm()
@@ -106,9 +110,11 @@ function PostCard({
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => {
-                                copy(`${window.location.origin}/#/post/${id}`)
-                            }}>
+                            <DropdownMenuItem onClick={(e) => {
+                                const link = `${window.location.origin}/thread/#/post/${id}`;
+                                copy(link);
+                                console.log(link);
+                                }}>
                                 <DropDownText text="Copy link" mAuto>
                                     <i className="fa-solid fa-link"></i>
                                 </DropDownText>
@@ -129,6 +135,6 @@ function PostCard({
             </div>
         </div>
     )
-}
+})
 
 export default PostCard;

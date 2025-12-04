@@ -5,6 +5,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import copy from "copy-to-clipboard";
+
+
 import { deleteSingerFeed } from "@/feartures/feed/feedSlice";
 import { selectUser } from "@/feartures/User/userSelector";
 import DropDownText from "@/layout/DefaultLayout/component/DropDownText";

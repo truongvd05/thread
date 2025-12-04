@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 
 const httpThreads = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
+  timeout: 30000,
 });
 
 let isRefreshing = false;
@@ -37,6 +38,15 @@ httpThreads.interceptors.request.use(
 httpThreads.interceptors.response.use(
   (response) => response,
   async (error) => {
+    if (err.code === "ECONNABORTED") {
+      console.error("Request timeout");
+      return Promise.reject({ message: "Server phản hồi quá lâu!" });
+    }
+
+    // ❌ Nếu mạng chết
+    if (!err.response) {
+      return Promise.reject({ message: "Không có kết nối mạng!" });
+    }
     const originalRequest = error.config;
     // Nếu 401 do token hết hạn
     if (error.response?.status === 401 && !originalRequest._retry) {

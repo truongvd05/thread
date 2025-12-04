@@ -75,7 +75,7 @@ function Reply({ open, onClose, id }) {
               <ReplyUser src={data?.user.avatar_url} name={data?.user.name}>
                   <p>{data?.content}</p>
               </ReplyUser>
-              <ReplyUser name={user?.user.name}>
+              <ReplyUser name={user?.user?.name}>
                   <div className="flex gap-2 flex-col">
                     <Textarea className="min-w-[150px]" placeholder={`reply to ${data?.user.name}`} {...register("message")}/>
                     <div className="flex gap-2">
