@@ -1,11 +1,12 @@
-import { formatPostTime } from "@/untils/time";
+import { usePost } from "@/contexts/PostContext";
 import User from "../User";
 
-function QoutePost({content, id ,user, time}) {
+function QoutePost() {
+    const post = usePost()
     return (
         <div className="border p-[20px] rounded-2xl">
-            <User time={time} userId={user.id} name={user.name} src={user.avatar_url}>
-                <p className="text-left">{content}</p>
+            <User item={post}>
+                <p className="text-left">{post.original_post.content}</p>
             </User>
         </div>
     )

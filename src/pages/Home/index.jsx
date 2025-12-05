@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import LoginPanel from "./components/LoginPanel";
 import News from "./components/news";
 import Post from "./components/Post";
@@ -14,6 +14,7 @@ import { selectFeedData } from "@/feartures/feed/feedSelector";
 import withLoginModal from "@/hoc/withLoginModal";
 import { useRef } from "react";
 import QoutePost from "./components/Post/QuotePost";
+import PostWrapper from "./components/Post/PostWrapper";
 
 function Home({requireLogin}) {
     const { user } = useSelector(selectUser)
@@ -26,12 +27,11 @@ function Home({requireLogin}) {
         feedLoading,
         hasNextPage,
     loadMore } = useLoadItems();
-        
     const [infiniteRef] = useInfiniteScroll({
         loading: feedLoading,
         hasNextPage,
         onLoadMore: loadMore,
-        root: srollRef,
+        root: srollRef.current,
         rootMargin: "0px 0px 400px 0px",
     });
     return (
@@ -45,7 +45,7 @@ function Home({requireLogin}) {
                             <Button variant="outline">Login</Button>
                         </NavLink>}
                     </div>
-                    <div ref={srollRef} className="w-full min-h-screen max-h-screen overflow-y-auto m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border">
+                    <div ref={srollRef} className="w-full min-h-[50vh] max-h-[90vh] overflow-y-auto m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border">
                         
                         <div className="flexjustify-center ">
                             <span className="block sm:hidden text-center flex-1 text-4xl">
@@ -57,40 +57,20 @@ function Home({requireLogin}) {
                             <HomeSkeleton />
                         ) : (
                             items.map(item => (
-                                <div onClick={() => {
+                                <PostWrapper 
+                                    key={item.id} 
+                                    id={item.id}
+                                    item={item}
+                                    ref={el => (imgRef.current[item.id] = el)}>
+                                    <div onClick={() => {
                                         if(!user) return requireLogin();
                                         navigate(`/post/${item.id}`);
-                                    }} key={item.id} 
-                                    id={item.id}
-                                    ref={el => (imgRef.current[item.id] = el)}
-                                    className="flex flex-col gap-2 border-b-[1px] p-[16px] cursor-pointer">
-                                    <Post
-                                    userId={item.user?.id}
-                                    id={item?.id}
-                                    name={item?.user.name}
-                                    content={item?.content}
-                                    time={item?.created_at}
-                                    />
-                                    <PostCard
-                                    ref={imgRef}
-                                    replyName={item.user.name}
-                                    isLikeByAuth={item.is_liked_by_auth}
-                                    id={item.id}
-                                    like={item.likes_count}
-                                    repeat={item.reposts_and_quotes_count}
-                                    cmt={item.replies_count}
-                                    share={item.reposts_and_quotes_count}
-                                    user={user} requireLogin={requireLogin}
-                                    isRepost={item.is_reposted_by_auth}
-                                    />
-                                    {item.original_post && 
-                                    (<QoutePost 
-                                    content={item?.original_post.content}
-                                    id={item?.original_post.id}
-                                    user={item?.original_post.user}
-                                    time={item?.created_at}
-                                    />)}
-                                </div>
+                                    }} className="flex flex-col gap-2 border-b-[1px] p-[16px] cursor-pointer">
+                                        <Post/>
+                                        <PostCard requireLogin={requireLogin}/>
+                                        {item.original_post && (<QoutePost />)}
+                                    </div>
+                                </PostWrapper>
                             ))
                         )}
                         {hasNextPage && (

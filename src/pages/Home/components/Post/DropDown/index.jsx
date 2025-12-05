@@ -5,21 +5,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import copy from "copy-to-clipboard";
 
 
 import { deleteSingerFeed } from "@/feartures/feed/feedSlice";
 import { selectUser } from "@/feartures/User/userSelector";
 import DropDownText from "@/layout/DefaultLayout/component/DropDownText";
-import { deletePost } from "@/services/post";
+import { collectionPost, deletePost } from "@/services/post";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { usePost } from "@/contexts/PostContext";
 
-function DropDown({id, userId}) {
+function DropDown() {
+    const post = usePost()
+    const [isSave, setIsSave] = useState(post?.is_saved_by_auth)
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
     const handleDelete = async () => {
-        await deletePost(id);
+        await deletePost(post?.id);
         dispatch(deleteSingerFeed())
+    }
+    const handleCollection = async () => {
+        try {
+            const res = await collectionPost(post?.id);
+            setIsSave(res?.is_saved)
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
         <div onClick={(e) => {
@@ -36,8 +47,8 @@ function DropDown({id, userId}) {
                         </DropDownText>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                        <DropDownText text="Lưu" mAuto>
+                    <DropdownMenuItem onClick={() => handleCollection()}>
+                        <DropDownText text={isSave ? `unsave` : " save"} mAuto>
                             <i className="fa-regular fa-bookmark"></i>
                         </DropDownText>
                         </DropdownMenuItem>
@@ -72,7 +83,7 @@ function DropDown({id, userId}) {
                             <i className="fa-solid fa-link"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    {user.user?.id === userId ? 
+                    {user?.user?.id === post?.owner.id ? 
                     <DropdownMenuItem onClick={() => handleDelete()}>
                         <DropDownText text="Xóa" mAuto red>
                             <i className="fa-solid fa-delete-left"></i>

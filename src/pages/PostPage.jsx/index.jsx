@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { getCmt, getSingerPost } from "@/services/post";
 import PostSkeleton from "./PostSkeleton";
 import Comment from "./Comment";
+import PostWrapper from "../Home/components/Post/PostWrapper";
+import CommentWrapper from "./Comment/CommentWrapper";
 
 function PostPage() {
     const { id } = useParams();
@@ -14,13 +16,11 @@ function PostPage() {
     const [ cmt, setCmt ] = useState([]);
     const [ post, setPost ] = useState(null);
     const [loading, setLoading] = useState(false)
-    
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
                 const rescmt = await getCmt(id);
-                console.log(rescmt);
                 setCmt(rescmt);
                 const respost = await getSingerPost(id);
                 setPost(respost)
@@ -35,45 +35,32 @@ function PostPage() {
     if (loading || !post) return <PostSkeleton />;
     return (
         <div className="w-full min-h-screen max-h-screen overflow-y-auto m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border *:p-[16px]">
-            <div className="flexjustify-center ">
-                <span className="block sm:hidden text-center flex-1 text-4xl">
-                    <i className="fa-brands fa-threads"></i>
-                </span>
-            </div>
-            <div
-                className="flex flex-col gap-2 border-b-[1px]  cursor-pointer">
-                <Post name={post.user.name} content={post.content} />
-                <PostCard
-                replyName={post.user.name}
-                isLikeByAuth={user.is_liked_by_auth}
-                id={post.id}
-                like={post.likes_count}
-                repeat={post.reposts_and_quotes_count}
-                cmt={post.replies_count}
-                share={post.reposts_and_quotes_count}
-                user={user}
-                isRepost={post.is_reposted_by_auth}
-                />
-            </div>
-            <div className="flex justify-between border-b-[1px]">
-                <p>Top</p>
-                <p>View activity</p>
-            </div>
-                {cmt.length > 0 ? (cmt.map((item) => {
-                    return <div key={item.id}>
-                            <Comment 
-                            name={item.user.name}
-                            content={item.content}
-                            like={item.likes_count}
-                            repeat={item.reposts_and_quotes_count}
-                            cmt={item.replies_count}
-                            share={item.reposts_and_quotes_count}
-                            />
-                        </div>
-                }))
-                : "chưa có bình luận nào"}
-            <div>
-            </div>
+            <PostWrapper item={post}>
+                <div className="flexjustify-center ">
+                    <span className="block sm:hidden text-center flex-1 text-4xl">
+                        <i className="fa-brands fa-threads"></i>
+                    </span>
+                </div>
+                <div
+                    className="flex flex-col gap-2 border-b-[1px]  cursor-pointer">
+                        <Post/>
+                        <PostCard/>
+                </div>
+                <div className="flex justify-between border-b-[1px]">
+                    <p>Top</p>
+                    <p>View activity</p>
+                </div>
+                    {cmt.length > 0 ? (cmt.map((item) => {
+                        return <div key={item.id}>
+                                <CommentWrapper item={item}>
+                                    <Comment/>
+                                </CommentWrapper>
+                            </div>
+                    }))
+                    : "chưa có bình luận nào"}
+                <div>
+                </div>
+            </PostWrapper>
         </div>
     )
 }

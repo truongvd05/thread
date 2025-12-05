@@ -1,5 +1,5 @@
 import { fetchFeed } from "@/feartures/feed/feedActions";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function useLoadItems() {

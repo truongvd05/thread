@@ -5,7 +5,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 import { useForm } from "react-hook-form"
 import copy from "copy-to-clipboard";
@@ -13,20 +12,20 @@ import DropDownText from "@/layout/DefaultLayout/component/DropDownText";
 import useRepost from "@/hooks/useRepost";
 import useLike from "@/hooks/useLike";
 import { usePostModal } from "@/contexts/PostModalContext";
-import { usePost } from "@/contexts/PostContext";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/feartures/User/userSelector";
+import { useComment } from "@/contexts/CommentContext";
 
-function PostCard ({requireLogin}) {
-    const post = usePost();
+function PostCardComment({requireLogin}) {
+    const comment = useComment();
     const user = useSelector(selectUser)    
     const {
         formState: { errors },
     } = useForm()
     const {isLiked, likeCount, toggleLike, loading: likeLoading} = 
-        useLike(post.is_liked_by_auth, post.likes_count, post.id, requireLogin, user)
+        useLike(comment.is_liked_by_auth, comment.like, comment.id, requireLogin, user)
     const { isReposted, repostCount, toggleRepost, loading: repostLoading } =
-        useRepost(post.is_reposted_by_auth, post.replies_count, post.id, requireLogin, user);
+        useRepost(comment.is_reposted_by_auth, comment.replies_count, comment.id, requireLogin, user);
     const { openReply, openQuote } = usePostModal();
     const onButtonClick = () => {
         const node = getNode();
@@ -65,7 +64,7 @@ function PostCard ({requireLogin}) {
                         openReply(post.id)
                 }} className="cursor-pointer">
                     <i className="fa-regular fa-comment my-auto mx-0"></i>
-                    <p>{post.replies_count ?? 5}</p>
+                    <p>{comment.replies_count ?? 5}</p>
                 </div>
                 <div>
                     <DropdownMenu open={!user ? false : undefined}
@@ -113,7 +112,7 @@ function PostCard ({requireLogin}) {
                         <DropdownMenuTrigger asChild >
                             <div className="flex gap-2">
                                 <i className="fa-solid fa-share my-auto mx-0"></i>
-                                <p>{post.reposts_and_quotes_count ?? 1}</p>
+                                <p>{comment.reposts_and_quotes_count ?? 1}</p>
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
@@ -144,4 +143,4 @@ function PostCard ({requireLogin}) {
 )
 }
 
-export default PostCard;
+export default PostCardComment;

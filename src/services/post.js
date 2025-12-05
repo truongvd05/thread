@@ -76,8 +76,15 @@ export const replyPost = async (content, id) => {
     const res = await http.post(`api/posts/${id}/reply`, { content });
     return res.data;
   } catch (err) {
-    {
-      throw err.response?.data || { message: "lỗi" };
-    }
+    throw err.response?.data || { message: "lỗi" };
+  }
+};
+
+export const collectionPost = async (id) => {
+  try {
+    const res = await http.post(`api/posts/${id}/save`);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { message: "lỗi" };
   }
 };

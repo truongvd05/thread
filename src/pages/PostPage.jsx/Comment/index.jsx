@@ -1,12 +1,12 @@
-import PostCard from "@/components/post/PostCard";
-import Post from "@/pages/Home/components/Post";
+import { useComment } from "@/contexts/CommentContext";
+import PostComment from "./PostComment";
+import PostCardComment from "./PostCardComment/inex";
 
-function Comment({name, content, like, repeat, cmt, share}) {
+function Comment() {
     return (
         <div>
-            <Post name={name}/>
-            <p>{content}</p>
-            <PostCard like={like} repeat={repeat} cmt={cmt} share={share}/>
+            <PostComment/>
+            <PostCardComment/>
         </div>
     )
 }

@@ -22,8 +22,6 @@ import { selectUser } from "@/feartures/User/userSelector"
 function Reply({ open, onClose, id }) {
   const [data, setData] = useState(null)
   const user = useSelector(selectUser)
-  console.log(user);
-  
   const {
     register,
     handleSubmit,

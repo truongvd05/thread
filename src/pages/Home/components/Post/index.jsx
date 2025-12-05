@@ -1,10 +1,13 @@
+import { usePost } from "@/contexts/PostContext";
 import User from "./User";
+import { useEffect } from "react";
 
-function Post({src, name, content, id, userId, time}) {
+function Post() {
+    const post = usePost()
     return (
         <div className="flex flex-col gap-2">
-            <User time={time} userId={userId} id={id} tick src={src} name={name}>
-                <p className="text-left">{content}</p>
+            <User item={post}>
+                <p className="text-left">{post?.content}</p>
             </User>
         </div>
     )
