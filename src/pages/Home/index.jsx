@@ -47,7 +47,7 @@ function Home({requireLogin}) {
                             <Button variant="outline">Login</Button>
                         </NavLink>}
                     </div>
-                    <div ref={srollRef} className="w-full min-h-[50vh] max-h-[90vh] overflow-y-auto m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border">
+                    <div ref={srollRef} className="w-full min-h-[50vh]  m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border">
                         
                         <div className="flexjustify-center ">
                             <span className="block sm:hidden text-center flex-1 text-4xl">

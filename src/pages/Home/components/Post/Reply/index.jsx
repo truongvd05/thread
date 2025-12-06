@@ -9,7 +9,6 @@ import {
 
 import { useForm } from "react-hook-form"
 
-import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -30,7 +29,7 @@ function Reply({ open, onClose, id }) {
   } = useForm()
 
   const onSubmit = async (data) => {
-    const res = await replyPost(data.message, id)
+    await replyPost(data.message, id)
     onClose();
   }
 
@@ -75,7 +74,7 @@ function Reply({ open, onClose, id }) {
               </ReplyUser>
               <ReplyUser name={user?.user?.name}>
                   <div className="flex gap-2 flex-col">
-                    <Textarea className="min-w-[150px]" placeholder={`reply to ${data?.user.name}`} {...register("message")}/>
+                    <Input className="min-w-[150px]" placeholder={`reply to ${data?.user.name}`} {...register("message")}/>
                     <div className="flex gap-2">
                       <i className="fa-regular fa-image"></i>
                       <i className="fa-solid fa-upload"></i>
