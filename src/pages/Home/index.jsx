@@ -19,6 +19,8 @@ import PostWrapper from "./components/Post/PostWrapper";
 function Home({requireLogin}) {
     const { user } = useSelector(selectUser)
     const data = useSelector(selectFeedData)
+    console.log(data);
+    
     const navigate = useNavigate()
     const srollRef = useRef(null);
     const imgRef = useRef({});
@@ -57,8 +59,8 @@ function Home({requireLogin}) {
                             <HomeSkeleton />
                         ) : (
                             items.map(item => (
-                                <PostWrapper 
-                                    key={item.id} 
+                                !item.is_ghost && (<PostWrapper
+                                    key={item.id}
                                     id={item.id}
                                     item={item}
                                     ref={el => (imgRef.current[item.id] = el)}>
@@ -70,7 +72,7 @@ function Home({requireLogin}) {
                                         <PostCard requireLogin={requireLogin}/>
                                         {item.original_post && (<QoutePost />)}
                                     </div>
-                                </PostWrapper>
+                                </PostWrapper>)
                             ))
                         )}
                         {hasNextPage && (

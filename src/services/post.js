@@ -88,3 +88,39 @@ export const collectionPost = async (id) => {
     throw err.response?.data || { message: "lỗi" };
   }
 };
+
+export const hiddenPost = async (id) => {
+  try {
+    const res = await http.post(`api/posts/${id}/hide`);
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "lỗi" };
+  }
+};
+
+export const muteUser = async (userId) => {
+  try {
+    const res = await http.post(`api/users/${userId}/mute`);
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "lỗi" };
+  }
+};
+
+export const restrictUser = async (userId) => {
+  try {
+    const res = await http.post(`api/users/${userId}/restrict`);
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "lỗi" };
+  }
+};
+
+export const blockUser = async (userId) => {
+  try {
+    const res = await http.post(`api/users/${userId}/block`);
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "lỗi" };
+  }
+};

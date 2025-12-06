@@ -19,7 +19,7 @@ import { selectUser } from "@/feartures/User/userSelector";
 
 function PostCard ({requireLogin}) {
     const post = usePost();
-    const user = useSelector(selectUser)    
+    const {user} = useSelector(selectUser);
     const {
         formState: { errors },
     } = useForm()
@@ -93,7 +93,7 @@ function PostCard ({requireLogin}) {
                             <DropdownMenuItem >
                                 <DropDownText onClick={(e) => {
                                     e.stopPropagation()
-                                    openQuote(id)
+                                    openQuote(post?.id)
                                 }} text="Quote" mAuto>
                                     <i className="fa-regular fa-comment-dots"></i>
                                 </DropDownText>

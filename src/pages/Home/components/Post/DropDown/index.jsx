@@ -6,16 +6,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
-import { deleteSingerFeed } from "@/feartures/feed/feedSlice";
+import copy from "copy-to-clipboard";
+import { deleteSingerFeed, updatePostHidden } from "@/feartures/feed/feedSlice";
 import { selectUser } from "@/feartures/User/userSelector";
 import DropDownText from "@/layout/DefaultLayout/component/DropDownText";
-import { collectionPost, deletePost } from "@/services/post";
+import { blockUser, collectionPost, deletePost, hiddenPost, muteUser, restrictUser } from "@/services/post";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { usePost } from "@/contexts/PostContext";
+import { usePostModal } from "@/feartures/modal/modal";
 
 function DropDown() {
+    const { openReport } = usePostModal();
     const post = usePost()
     const [isSave, setIsSave] = useState(post?.is_saved_by_auth)
     const dispatch = useDispatch()
@@ -29,6 +31,35 @@ function DropDown() {
             const res = await collectionPost(post?.id);
             setIsSave(res?.is_saved)
         } catch (err) {
+            console.log(err);
+        }
+    }
+    const handleHiddenPost = async () => {
+        try {
+            const res = await hiddenPost(post?.id);
+            dispatch(updatePostHidden({id: post?.id, is_ghost: true}))
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    const handleMute = async () => {
+        const res = await muteUser(post?.owner.id);
+        console.log(res);
+    }
+    const handleRestrict = async () => {
+        try {
+            const res = await restrictUser(post?.owner.id);
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    const handleBlock = async () => {
+        try {
+            const res = await blockUser(post?.owner.id);
+            console.log(res);
+        } catch(err) {
             console.log(err);
         }
     }
@@ -52,37 +83,47 @@ function DropDown() {
                             <i className="fa-regular fa-bookmark"></i>
                         </DropDownText>
                         </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleHiddenPost()}>
                         <DropDownText text="Không quan tâm" mAuto>
                             <i className="fa-regular fa-eye-slash"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleMute()}>
                         <DropDownText text="Tắt thông báo" mAuto>
                             <i className="fa-solid fa-user-clock"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleRestrict()}>
                         <DropDownText text="Hạn chế" mAuto>
                             <i className="fa-solid fa-user-shield"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleBlock()}>
                         <DropDownText text="Chặn" mAuto red>
                             <i className="fa-solid fa-user-slash"></i>
                         </DropDownText>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={openReport}>
                         <DropDownText text="Báo cáo" mAuto red>
                             <i className="fa-solid fa-circle-exclamation"></i>
                         </DropDownText>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={(e) => {
+                                        const link = `${window.location.origin}/thread/#/post/${post?.id}`;
+                                        copy(link);
+                                        console.log(link);
+                                        }}>
                         <DropDownText text="Sao chéo liên kết" mAuto>
                             <i className="fa-solid fa-link"></i>
                         </DropDownText>
                     </DropdownMenuItem>
+                    {user?.user?.id === post?.owner.id ? 
+                    <DropdownMenuItem onClick={() => handleEdit()}>
+                        <DropDownText text="Sửa" mAuto red>
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </DropDownText>
+                    </DropdownMenuItem> : null}
                     {user?.user?.id === post?.owner.id ? 
                     <DropdownMenuItem onClick={() => handleDelete()}>
                         <DropDownText text="Xóa" mAuto red>

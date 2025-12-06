@@ -4,6 +4,7 @@ import { useState } from "react";
 import Reply from "@/pages/Home/components/Post/Reply";
 import QuoteModal from "@/components/QuoteModal";
 import { PostModalProvider } from "@/contexts/PostModalContext";
+import ReportModal from "@/components/ReportModal";
 
 function DefaultLayout() {
     const [replyTo, setReplyTo] = useState(null);
@@ -15,6 +16,7 @@ function DefaultLayout() {
                 <Outlet/>
                 <Reply id={replyTo} open={replyTo !== null} onClose={() => setReplyTo(null)}/>
                 <QuoteModal id={quoteTo} open={quoteTo !== null} onClose={() => setQuoteTo(null)}/>
+                <ReportModal/>
             </div>
         </PostModalProvider>
     )

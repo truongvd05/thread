@@ -26,6 +26,13 @@ export const feedSlice = createSlice({
     deleteSingerFeed: (state, action) => {
       state.data.shift();
     },
+    updatePostHidden: (state, action) => {
+      const { id, is_ghost } = action.payload;
+      const post = state.data.find((item) => item.id === id);
+      if (post) {
+        post.is_ghost = is_ghost;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -48,4 +55,5 @@ export const feedSlice = createSlice({
 
 export default feedSlice.reducer;
 
-export const { clearData, addFeed, deleteSingerFeed } = feedSlice.actions;
+export const { clearData, addFeed, deleteSingerFeed, updatePostHidden } =
+  feedSlice.actions;
