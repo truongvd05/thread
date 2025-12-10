@@ -1,0 +1,133 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form"
+import { NavLink, useNavigate } from "react-router";
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useCallback, useEffect, useState } from "react";
+import debounce from "lodash.debounce";
+import { registerUser, validateEmail } from "@/services/auth";
+
+
+const schema = yup.object({
+    username: yup.string().min(3, "tên ít nhất 3 kí tự").required("Tên người dùng là bắt buộc"),
+    email: yup.string().email("Email không hợp lệ").required("Email là bắt buộc"),
+    password: yup.string().min(8, "mật khẩu tối đa 8 kí tự").required("Mật khẩu là bắt buộc"),
+    password_confirmation: yup.string().oneOf([yup.ref("password")], "Mật khẩu không trùng khớp").required("Nhập lại mật khẩu")
+})
+
+function Register() {
+    const {
+        register,
+        handleSubmit,
+        setError,
+        clearErrors,
+        watch,
+        formState: { errors },
+    } = useForm({ resolver: yupResolver(schema) });
+
+    const [loading, setLoading ] = useState(false);
+    const [iconLoading, setIconLoading] = useState(false)
+    const [toast, setToast] = useState(false);
+    
+    const onSubmit = async (data) => {
+        setLoading(true);
+        try {
+            const res = await registerUser(data);
+            console.log(res);
+            localStorage.setItem("access_token", res.access_token)
+            localStorage.setItem("refresh_token", res.refresh_token)
+            setToast(true);
+            clearErrors("email")
+            // navigate("/login")
+        } catch (err) {
+            const errors = err?.errors || {};
+            if (Object.keys(errors).length) {
+                Object.entries(errors).forEach(([field, message]) => {
+                    setError(field, { type: "manual", message });
+                });
+            } else {
+                setError("email", { type: "manual", message: err?.message || "Đăng ký thất bại" });
+            }
+        } finally {
+            setLoading(false)
+            setTimeout(()=> {
+                setToast(false);
+            }, 5000)
+        }
+    }
+    const emailvalue = watch("email")
+    
+    const checkEmail = useCallback(
+    debounce(async (email) => {
+        if(!email) return;
+        setIconLoading(true);
+        try {
+            const data = await validateEmail(email);
+            clearErrors("email");
+        } catch (err) {
+            setError("email", {
+                type: "manual",
+                message: "email không hợp lệ"
+            });
+        } finally {
+            setIconLoading(false)
+        }
+    }, 500),
+    []
+  );
+
+    useEffect(() => {
+    checkEmail(emailvalue);
+    }, [emailvalue]);
+    
+    useEffect(() => {
+    return () => {
+        checkEmail.cancel();
+    };
+    }, [checkEmail]);
+
+    return (
+        <>
+            <Card className="w-full max-w-sm m-auto">
+                <CardHeader>
+                    <CardTitle className="m-auto">Register</CardTitle>
+                </CardHeader>
+                <form className="flex flex-col items-center gap-2" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex flex-col w-[80%] m-auto gap-2">
+                        <Input type="text" autoComplete="username" placeholder="Tên người dùng" {...register("username", { required: true })}/>
+                        {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
+                        <div className="relative">
+                            <Input autoComplete="email" type="email" placeholder="Email" {...register("email", { required: true })}/>
+                            {iconLoading && <i class="fa-solid fa-spinner absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-gray-400"></i>}
+                        </div>
+                        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+                        <Input type="password" autoComplete="new-password" placeholder="Mật khẩu" {...register("password", { required: true })}/>
+                        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+                        <Input type="password" autoComplete="new-password" placeholder="Xác nhận mật khẩu" {...register("password_confirmation", { required: true })}/>
+                        {errors.password_confirmation && <span className="text-red-500 text-sm">{errors.password_confirmation.message}</span>}
+                    </div>
+                    {loading && <i class="fa-solid fa-spinner animate-spin text-gray-400"></i>}
+                    <Button disabled={loading} className="block" type="submit">Đăng kí</Button>
+                </form>
+                <CardFooter className=" flex flex-col">
+                    <NavLink className="" to="/login">Đã có tài khoản</NavLink>
+                </CardFooter>
+            </Card>
+            <div className={`${toast ? "opacity-100 scale-100 z-50 fixed" : "opacity-0 scale-90 pointer-events-none z-[-1]"}
+            top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+            text-center bg-gray-200 rounded-2xl pointer-events-none"`}>
+                Chúng tôi đã gửi một liên kết xác thực tới email của bạn. Vui lòng kiểm tra email để xác thực tài khoản
+            </div>
+        </>
+    )
+}
+
+export default Register;
