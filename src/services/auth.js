@@ -3,7 +3,6 @@ import http from "@/untils/httpRequest";
 export const registerUser = async (data) => {
   try {
     const res = await http.post("api/auth/register", data, {
-      skipAuth: true,
       headers: {
         "x-origin": import.meta.env.VITE_APP_ORIGIN,
       },
@@ -16,7 +15,7 @@ export const registerUser = async (data) => {
 
 export const loginUser = async (data) => {
   try {
-    const res = await http.post("api/auth/login", data, { skipAuth: true });
+    const res = await http.post("api/auth/login", data);
     return res.data;
   } catch (err) {
     throw err.response?.data || { message: "Sai tài khoản hoặc mật khẩu" };
@@ -57,7 +56,6 @@ export const forgotPassword = async (email) => {
       "api/auth/forgot-password",
       { email },
       {
-        skipAuth: true,
         headers: {
           "x-origin": import.meta.env.VITE_APP_ORIGIN,
         },
@@ -71,22 +69,16 @@ export const forgotPassword = async (email) => {
 
 export const userVerifyEmail = async (token) => {
   try {
-    const res = await http.post(
-      `api/auth/verify-email`,
-      { token },
-      { skipAuth: true },
-    );
+    const res = await http.post(`api/auth/verify-email`, { token });
     return res;
   } catch (err) {
-    throw err.response?.data || { message: "lỗi" };
+    throw err.response?.data;
   }
 };
 
 export const userResetPassWord = async (data) => {
   try {
-    const res = await http.post(`api/auth/reset-password`, data, {
-      skipAuth: true,
-    });
+    const res = await http.post(`api/auth/reset-password`, data);
     return res;
   } catch (err) {
     throw err.response?.data || { message: "lỗi" };

@@ -49,9 +49,6 @@ httpThreads.interceptors.response.use(
     }
     const originalRequest = error.config;
 
-    if (originalRequest?.skipAuth) {
-      return Promise.reject(err); // ✅ không refresh
-    }
     // Nếu 401 do token hết hạn
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -72,12 +69,14 @@ httpThreads.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refresh_token");
+
         // Gọi API refresh token
         const res = await axios.post(
           import.meta.env.VITE_BASE_URL + "api/auth/refresh",
           {
             refresh_token: refreshToken,
           },
+          { skipAuth: true },
         );
         const newToken = res.data.data.access_token;
 
@@ -89,6 +88,7 @@ httpThreads.interceptors.response.use(
 
         // Retry lại request cũ
         originalRequest.headers["Authorization"] = "Bearer " + newToken;
+        console.log("refresh thanh cong");
         return httpThreads(originalRequest);
       } catch (err) {
         store.dispatch(clearUser());

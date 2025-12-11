@@ -3,7 +3,6 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { lazy } from 'react';
 
 import DefaultLayout from "../../layouts/DefaultLayout";
-import PrivateRoute from "../routes/PrivateRoute";
 
 const Login = lazy(() => import("@/pages/Auth/Login"))
 const ForgotPassword = lazy(() => import("@/pages/Auth/ForgotPassword"))
@@ -26,10 +25,10 @@ function AppRoutes() {
             <Routes>
                 <Route element={<DefaultLayout/>}>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/Home" element={<Home/>}/>
-                    <Route path="/Search" element={<Search/>}/>
-                    <Route path="/Heart" element={<Heart/>}/>
-                    <Route path="/User" element={<User/>}/>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/search" element={<Search/>}/>
+                    <Route path="/heart" element={<Heart/>}/>
+                    <Route path="/user" element={<User/>}/>
                     <Route path="/post/:id" element={<PostPage/>}/>
                 </Route>
                 <Route element={<AuthLayout/>}>
