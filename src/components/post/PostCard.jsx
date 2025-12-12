@@ -18,6 +18,13 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/feartures/User/userSelector";
 import { useNavigate } from "react-router";
 
+function download(dataUrl, filename) {
+    const link = document.createElement("a");
+    link.download = filename;
+    link.href = dataUrl;
+    link.click();
+}
+
 function PostCard ({requireLogin, interactive = true,}) {
     const post = usePost();
     const navigate = useNavigate()
@@ -30,20 +37,23 @@ function PostCard ({requireLogin, interactive = true,}) {
     const { isReposted, repostCount, toggleRepost, loading: repostLoading } =
         useRepost(post.is_reposted_by_auth, post.replies_count, post.id, requireLogin, user);
     const { openReply, openQuote } = usePostModal();
+    
     const onButtonClick = () => {
-        const node = getNode();
-        if (!node) return;
-        htmlToImage
-            .toPng(node)
-            .then((dataUrl) => {
-                const img = new Image();
-                img.src = dataUrl;
-                document.body.appendChild(img);
-            })
-            .catch((err) => {
-                console.error('oops, something went wrong!', err);
-            });
+    const node = document.getElementById(`${post?.id}`);
+    console.log(node);
+    if (!node) {
+        console.error("Không tìm thấy element cần chụp");
+        return;
     }
+    htmlToImage
+        .toPng(node)
+        .then((dataUrl) => {
+            download(dataUrl, `${post.id}.png`);
+        })
+        .catch((err) => {
+            console.error("oops, something went wrong!", err);
+        });
+};
     const handleEmbeb = () => {
         navigate(`/${post?.owner.name}/post/${post?.id}/embed`)
     }

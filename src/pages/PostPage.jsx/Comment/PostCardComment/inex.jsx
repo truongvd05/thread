@@ -15,8 +15,10 @@ import { usePostModal } from "@/contexts/PostModalContext";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/feartures/User/userSelector";
 import { useComment } from "@/contexts/CommentContext";
+import { usePost } from "@/contexts/PostContext";
 
 function PostCardComment({requireLogin}) {
+    const post = usePost();
     const comment = useComment();
     const user = useSelector(selectUser)    
     const {
@@ -28,14 +30,16 @@ function PostCardComment({requireLogin}) {
         useRepost(comment.is_reposted_by_auth, comment.replies_count, comment.id, requireLogin, user);
     const { openReply, openQuote } = usePostModal();
     const onButtonClick = () => {
-        const node = getNode();
+        const node = document.getElementById(`${post?.id}`);
+        console.log(node);
         if (!node) return;
         htmlToImage
             .toPng(node)
             .then((dataUrl) => {
-                const img = new Image();
-                img.src = dataUrl;
-                document.body.appendChild(img);
+                const link = document.createElement('a');
+                link.download = 'post.png';
+                link.href = dataUrl;
+                link.click();
             })
             .catch((err) => {
                 console.error('oops, something went wrong!', err);

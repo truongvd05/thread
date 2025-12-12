@@ -27,17 +27,17 @@ function Reply({ open, onClose, id }) {
     watch,
     formState: { errors },
   } = useForm()
-
   const onSubmit = async (data) => {
     await replyPost(data.message, id)
     onClose();
   }
-
   useEffect(() => {
     if(!id) return;
     const fetchSingerPost = async () => {
       try {
         const res = await getSingerPost(id);
+        console.log(res);
+        
         setData(res)
       } catch (err) {
         console.log(err);
@@ -45,7 +45,9 @@ function Reply({ open, onClose, id }) {
     }
     fetchSingerPost();
   }, [id, open])
-  
+  useEffect(() => {
+  console.log("EFFECT RUN WITH ID:", id, "OPEN:", open);
+}, [id, open]); 
   return (
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[425px] [&>button]:hidden">

@@ -12,8 +12,6 @@ function DefaultLayout() {
     const [replyTo, setReplyTo] = useState(null);
     const [quoteTo, setQuoteTo] = useState(null);
     const {user} = useSelector(selectUser);
-    console.log(user);
-    
     if(!user) {
         return <Navigate to="/login" replace/>
     }
