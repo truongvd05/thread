@@ -42,7 +42,7 @@ function PostCard ({requireLogin, interactive = true,}) {
     const node = document.getElementById(`${post?.id}`);
     console.log(node);
     if (!node) {
-        console.error("Không tìm thấy element cần chụp");
+        console.error("Không tìm thấy ảnh cần chụp");
         return;
     }
     htmlToImage
@@ -51,7 +51,7 @@ function PostCard ({requireLogin, interactive = true,}) {
             download(dataUrl, `${post.id}.png`);
         })
         .catch((err) => {
-            console.error("oops, something went wrong!", err);
+            console.error("lỗi", err);
         });
 };
     const handleEmbeb = () => {
