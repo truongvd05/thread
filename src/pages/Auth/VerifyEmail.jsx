@@ -24,9 +24,10 @@ function VerifyEmail() {
                 const res = await userVerifyEmail(token);
                 console.log(res);
                 setTimeout(() => {
-                    navigate("/login")
+                    navigate("/login", {
+                        state: { verified: true }
+                    })
                 }, 5000)
-                setLoading(false);
                 setSuccess(res.success)
             } catch (err) {
                 console.log(err);
@@ -45,7 +46,7 @@ function VerifyEmail() {
             <div className="w-[80%] m-auto gap-2 text-center">
                 {loading && (
                     <div className="flex gap-2 items-center justify-center">
-                        <p>Đang xác thực</p>
+                        <p>Đang xác minh...</p>
                         <i className="fa-solid fa-spinner animate-spin text-gray-400"></i>
                     </div>)}
                     {!loading && (

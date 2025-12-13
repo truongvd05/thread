@@ -11,8 +11,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { Input } from "@/components/ui/input";
 import { loginUser } from "@/services/auth";
 import { useForm } from "react-hook-form"
-import { NavLink, useNavigate } from "react-router";
-import { useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/feartures/User/userSlice";
@@ -25,16 +25,29 @@ const schema = yup.object({
 
 function Login() {
     const [loading, setLoading] = useState(false);
+    const [verifi, setVerify] = useState(false);
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { state } = useLocation();
+
+    useEffect(() => {
+        if (state?.verified) {
+            setVerify(true);
+        }
+    }, [state])
+
     const {
         register,
         handleSubmit,
         setError,
+        watch,
         clearErrors,
         formState: { errors },
     } = useForm({resolver: yupResolver(schema)});
-
+    const passwordValue = watch("password")
+        useEffect(()=> {
+            setError("err", null)
+        }, [passwordValue])
     const onSubmit = async (data) => {
         setLoading(true);
         try {
@@ -63,6 +76,7 @@ function Login() {
         <Card className="w-full max-w-sm m-auto">
             <CardHeader>
                 <CardTitle className="m-auto">Log in with your Instagram account</CardTitle>
+                {verifi && <p className="text-green-500 text-center">Đã xác minh tài khoản thành công. Vui lòng đăng nhập.</p>}
             </CardHeader>
             <form className="flex flex-col items-center gap-2" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col w-[80%] m-auto gap-2">

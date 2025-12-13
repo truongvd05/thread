@@ -85,13 +85,13 @@ function Register() {
   );
 
     useEffect(() => {
-    checkEmail(emailvalue);
+        checkEmail(emailvalue);
     }, [emailvalue]);
     
     useEffect(() => {
-    return () => {
-        checkEmail.cancel();
-    };
+        return () => {
+            checkEmail.cancel();
+        };
     }, [checkEmail]);
 
     return (
