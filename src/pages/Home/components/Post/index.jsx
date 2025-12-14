@@ -1,6 +1,5 @@
 import { usePost } from "@/contexts/PostContext";
 import User from "./User";
-import { useEffect } from "react";
 
 function Post() {
     const post = usePost()

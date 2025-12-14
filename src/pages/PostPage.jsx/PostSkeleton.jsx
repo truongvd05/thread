@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function PostSkeleton() {
     return (
-    <div className="w-full min-h-screen max-h-screen m-auto sm:w-xl rounded-2xl bg-white border border-gray-200 p-4">
+    <div className="w-full min-h-screen max-h-screen m-auto sm:w-xl rounded-2xl bg-background border border-gray-200 p-4">
       {/* Header */}
       <div className="flex justify-center mb-4">
         <Skeleton className="w-8 h-8 rounded-full" />

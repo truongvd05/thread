@@ -41,7 +41,8 @@ export const getUser = async (token) => {
 };
 
 export const logOutUser = async () => {
-  localStorage.clear();
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
   try {
     const res = await http.post("api/auth/logout");
     return res.data;

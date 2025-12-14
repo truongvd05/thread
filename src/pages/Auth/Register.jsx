@@ -95,7 +95,6 @@ function Register() {
     }, [checkEmail]);
 
     return (
-        <>
             <Card className="w-full max-w-sm m-auto">
                 <CardHeader>
                     <CardTitle className="m-auto">Register</CardTitle>
@@ -120,13 +119,22 @@ function Register() {
                 <CardFooter className=" flex flex-col">
                     <NavLink className="" to="/login">Đã có tài khoản</NavLink>
                 </CardFooter>
+                <div
+                    className={`
+                        fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                        text-center rounded-2xl px-6 py-4
+                        bg-popover text-popover-foreground
+                        transition-all duration-200
+                        border
+                        ${toast
+                        ? "opacity-100 scale-100 z-50"
+                        : "opacity-0 scale-90 pointer-events-none -z-10"}
+                    `}
+                    >
+                    Chúng tôi đã gửi một liên kết xác thực tới email của bạn.
+                    Vui lòng kiểm tra email để xác thực tài khoản
+                </div>
             </Card>
-            <div className={`${toast ? "opacity-100 scale-100 z-50 fixed" : "opacity-0 scale-90 pointer-events-none z-[-1]"}
-            top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-            text-center bg-gray-200 rounded-2xl pointer-events-none"`}>
-                Chúng tôi đã gửi một liên kết xác thực tới email của bạn. Vui lòng kiểm tra email để xác thực tài khoản
-            </div>
-        </>
     )
 }
 

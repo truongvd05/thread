@@ -17,7 +17,7 @@ function DefaultLayout() {
     }
     return (
         <PostModalProvider openReply={setReplyTo} openQuote={setQuoteTo}>
-            <div className="grid min-h-screen w-full m-auto w-full bg-[#fafafa]">
+            <div className="grid min-h-screen w-full m-auto w-full bg-background">
                 <Navigation/>
                 <Outlet/>
                 <Reply id={replyTo} open={replyTo !== null} onClose={() => setReplyTo(null)}/>

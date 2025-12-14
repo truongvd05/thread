@@ -34,7 +34,7 @@ function PostPage() {
     }, [id])
     if (loading || !post) return <PostSkeleton />;
     return (
-        <div className="w-full min-h-screen max-h-screen overflow-y-auto m-auto sm:w-xl rounded-2xl bg-white  border-gray-500 border-opacity-40 sm:border *:p-[16px]">
+        <div className="w-full min-h-screen max-h-screen overflow-y-auto m-auto sm:w-xl rounded-2xl bg-background  border-gray-500 border-opacity-40 sm:border *:p-[16px]">
             <PostWrapper item={post}>
                 <div className="flexjustify-center ">
                     <span className="block sm:hidden text-center flex-1 text-4xl">

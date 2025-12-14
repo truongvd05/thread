@@ -8,7 +8,7 @@ function AuthLayout() {
                 <source srcSet="https://static.cdninstagram.com/rsrc.php/yd/r/odhNEU0wX4h.webp" type="image/webp"/>
                 <img className="min-w-[1785px] ml-[-120px]" height="510" width="1785" src="https://static.cdninstagram.com/rsrc.php/v4/ym/r/_qas8NM9G0b.png" alt="" />
             </picture>
-            <Outlet/>
+            <div className="min-h-screen flex items-center"><Outlet/></div>
             <div className="fixed bottom-0 left-[50%] transform translate-x-[-50%]">
                 <p><i className="fa-regular fa-copyright"></i> Thread Team Privacy Policy Cookies Policy Repost a problem</p>
             </div>

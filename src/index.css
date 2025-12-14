@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
 
 @layer components  {
   .navbar > * {
@@ -17,7 +16,7 @@
     @apply mt-auto mb-auto;
   }
   .hover-icon {
-    @apply bg-white hover:bg-gray-200 transition rounded-2xl pr-2 pl-2;
+    @apply bg-background hover:bg-muted transition rounded-2xl pr-2 pl-2;
   }
 }
 
@@ -73,8 +72,6 @@ a {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -93,12 +90,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

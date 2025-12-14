@@ -66,7 +66,7 @@ function Home({requireLogin}) {
                                     <div onClick={() => {
                                         if(!user) return requireLogin();
                                         navigate(`/post/${item.id}`);
-                                    }} id={item.id} className="flex flex-col gap-2 border-b-[1px] p-[16px] cursor-pointer" style={{ background: "white" }}>
+                                    }} id={item.id} className="flex flex-col gap-2 border-b p-4 cursor-pointer bg-card text-card-foreground">
                                         <Post/>
                                         <PostCard requireLogin={requireLogin}/>
                                         {item.original_post && (<QoutePost />)}
