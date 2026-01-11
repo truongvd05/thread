@@ -6,7 +6,7 @@ function Post() {
     return (
         <div className="flex flex-col gap-2">
             <User item={post}>
-                <p className="text-left">{post?.content}</p>
+                <p className="text-left whitespace-pre-wrap break-words">{post?.content}</p>
             </User>
         </div>
     )

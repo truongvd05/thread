@@ -21,7 +21,7 @@ function News({src, name}) {
     dispatch(addFeed(res))
   }
     return (
-        <form className="flex gap-3 p-4 border-b bg-background" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex gap-3 p-4 border-b bg-background rounded-t-2xl" onSubmit={handleSubmit(onSubmit)}>
             <Avatar name={name} src={src ? "https://hinhcute.net/wp-content/uploads/2025/07/hinh-anh-avatar-trang-cuc-chat-08-05-2025.jpg" : ""}/>
             <Input defaultValue="Có gì mới?" placeholder="Có gì mới?" {...register("message")} />
             <Button type="submit" variant="outline" className="ml-auto">Đăng</Button>
