@@ -6,7 +6,7 @@ function PostComment() {
     return (
         <div className="flex flex-col gap-2">
             <User item={comment}>
-                <p className="text-left">{comment?.content}</p>
+                <p className="text-left whitespace-pre-wrap break-words">{comment?.content}</p>
             </User>
         </div>
     )
